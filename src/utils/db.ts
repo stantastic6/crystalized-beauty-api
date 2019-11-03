@@ -1,11 +1,15 @@
 import { connect } from 'mongoose'
-// import options from '../server'
 
-export const connectToDb = (options: {}) => {
+export const connectToDb = async (options?: {}) => {
   const url: string = process.env.DB_URL!
 
-  return connect(
+  return await connect(
     url,
-    { ...options, useNewUrlParser: true }
+    {
+      ...options,
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+    }
   )
 }
