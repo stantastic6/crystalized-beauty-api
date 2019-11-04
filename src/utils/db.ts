@@ -10,6 +10,7 @@ export const connectToDb = async (options?: {}) => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
+      useFindAndModify: false,
     }
   )
 }
