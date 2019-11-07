@@ -2,7 +2,7 @@ import { User } from './user.model'
 import { Request, Response } from 'express'
 import { removeKeyFromObject } from '../../utils/helpers'
 
-export const getUsers = async function(req: Request, res: Response) {
+export const getUsers = async (req: Request, res: Response) => {
   await User.find((err, users) => {
     if (err) {
       return res.status(422).json({ error: 'Error retrieving users.' })
@@ -12,7 +12,7 @@ export const getUsers = async function(req: Request, res: Response) {
   }).lean()
 }
 
-export const getUser = async function(req: Request, res: Response) {
+export const getUser = async (req: Request, res: Response) => {
   const userId: string = req.params.id
 
   await User.findById({ _id: userId }, '-password', (err: any, user: any) => {
@@ -24,7 +24,7 @@ export const getUser = async function(req: Request, res: Response) {
   }).lean()
 }
 
-export const createUser = function(req: Request, res: Response) {
+export const createUser = (req: Request, res: Response) => {
   // Validate input
   User.create(req.body, (err: any, user: any) => {
     if (err) {
@@ -35,7 +35,7 @@ export const createUser = function(req: Request, res: Response) {
   })
 }
 
-export const updateUser = async function(req: Request, res: Response) {
+export const updateUser = async (req: Request, res: Response) => {
   const userId: string = req.params.id
 
   User.findOneAndUpdate({ _id: userId }, req.body, { new: true }, (err, user) => {
@@ -47,7 +47,7 @@ export const updateUser = async function(req: Request, res: Response) {
   }).lean()
 }
 
-export const deleteUser = function(req: Request, res: Response) {
+export const deleteUser = (req: Request, res: Response) => {
   const userId: string = req.params.id
 
   User.findByIdAndDelete({ _id: userId }, (err, user) => {
