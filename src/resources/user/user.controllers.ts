@@ -12,10 +12,17 @@ export const getUsers = async (req: Request, res: Response) => {
   }).lean()
 }
 
+// @route GET api/products/:id
+// @desc GET details of product with specified ID
+// @access Public
 export const getUser = async (req: Request, res: Response) => {
   const userId: string = req.params.id
 
   await User.findById({ _id: userId }, '-password', (err: any, user: any) => {
+    if (err) {
+      return res.status(422).json({ error: 'Error retrieving user.' })
+    }
+
     if (!user) {
       return res.status(404).json({ error: 'User not found.' })
     }
