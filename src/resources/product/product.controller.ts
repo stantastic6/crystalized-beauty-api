@@ -32,3 +32,17 @@ export const getProduct = async (req: Request, res: Response) => {
     return res.status(200).json(product)
   }).lean()
 }
+
+// @route POST api/products/:id
+// @desc POST create product
+// @access Public
+export const createProduct = (req: Request, res: Response) => {
+  // Validate input
+  Product.create(req.body, (err: any, product: any) => {
+    if (err) {
+      return res.status(422).json({ msg: 'Error creating product', error: err })
+    }
+
+    return res.status(200).json(product)
+  })
+}

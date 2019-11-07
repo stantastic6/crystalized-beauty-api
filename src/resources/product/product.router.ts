@@ -1,8 +1,13 @@
 import { Router } from 'express'
-import { getProducts } from './product.controller'
+import { createProduct, getProduct, getProducts } from './product.controller'
 
 const router = Router()
 
-router.get('/', getProducts)
+router
+  .route('/')
+  .get(getProducts)
+  .post(createProduct)
+
+router.route('/:id').get(getProducts)
 
 export default router
