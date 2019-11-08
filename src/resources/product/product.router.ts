@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { createProduct, getProduct, getProducts } from './product.controller'
+import { createProduct, deleteProduct, getProduct, getProducts, updateProduct } from './product.controller'
 
 const router = Router()
 
@@ -8,6 +8,10 @@ router
   .get(getProducts)
   .post(createProduct)
 
-router.route('/:id').get(getProducts)
+router
+  .route('/:id')
+  .get(getProduct)
+  .put(updateProduct)
+  .delete(deleteProduct)
 
 export default router

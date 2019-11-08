@@ -2,6 +2,9 @@ import { User } from './user.model'
 import { Request, Response } from 'express'
 import { removeKeyFromObject } from '../../utils/helpers'
 
+// @route GET api/users
+// @desc GET all users
+// @access Public
 export const getUsers = async (req: Request, res: Response) => {
   await User.find((err, users) => {
     if (err) {
@@ -31,6 +34,9 @@ export const getUser = async (req: Request, res: Response) => {
   }).lean()
 }
 
+// @route POST api/users/
+// @desc POST create user
+// @access Public
 export const createUser = (req: Request, res: Response) => {
   // Validate input
   User.create(req.body, (err: any, user: any) => {
@@ -42,24 +48,34 @@ export const createUser = (req: Request, res: Response) => {
   })
 }
 
+// @route PUT api/users/:id
+// @desc PUT update user
+// @access Public
 export const updateUser = async (req: Request, res: Response) => {
   const userId: string = req.params.id
 
   User.findOneAndUpdate({ _id: userId }, req.body, { new: true }, (err, user) => {
-    if (!user) {
-      return res.status(404).json({ error: 'User not fount' })
+    if (err) {
+      return res.status(422).json({ message: 'Error creating user.', error: err })
     }
-    console.log(user)
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found.' })
+    }
+
     return res.status(200).json(user)
   }).lean()
 }
 
+// @route DELETE api/users/:id
+// @desc DELETE delete user
+// @access Public
 export const deleteUser = (req: Request, res: Response) => {
   const userId: string = req.params.id
 
   User.findByIdAndDelete({ _id: userId }, (err, user) => {
     if (err) {
-      return res.status(404).json({ error: 'User not fount' })
+      return res.status(404).json({ error: 'User not found.' })
     }
 
     return res.status(200).json(user)

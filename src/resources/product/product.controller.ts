@@ -33,7 +33,7 @@ export const getProduct = async (req: Request, res: Response) => {
   }).lean()
 }
 
-// @route POST api/products/:id
+// @route POST api/products/
 // @desc POST create product
 // @access Public
 export const createProduct = (req: Request, res: Response) => {
@@ -45,4 +45,42 @@ export const createProduct = (req: Request, res: Response) => {
 
     return res.status(200).json(product)
   })
+}
+
+// @route PUT api/products/:id
+// @desc PUT update product
+// @access Public
+export const updateProduct = async (req: Request, res: Response) => {
+  const productId: string = req.params.id
+
+  Product.findOneAndUpdate({ _id: productId }, req.body, { new: true }, (err: any, product: any) => {
+    if (err) {
+      return res.status(422).json({ message: 'Error creating product.', error: err })
+    }
+
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found.' })
+    }
+
+    return res.status(200).json(product)
+  }).lean()
+}
+
+// @route DELETE api/products/:id
+// @desc DELETE delete product
+// @access Public
+export const deleteProduct = (req: Request, res: Response) => {
+  const productId: string = req.params.id
+
+  Product.findByIdAndDelete({ _id: productId }, (err: any, product: any) => {
+    if (err) {
+      return res.status(422).json({ message: 'Error creating product.', error: err })
+    }
+
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found.' })
+    }
+
+    return res.status(200).json(product)
+  }).lean()
 }

@@ -30,7 +30,10 @@ export const getOrder = async (req: Request, res: Response) => {
     }
 
     return res.status(200).json(order)
-  }).lean()
+  })
+    .populate('user', '-password')
+    .populate('products')
+    .lean()
 }
 
 // @route POST api/products/
@@ -69,7 +72,7 @@ export const updateOrder = async (req: Request, res: Response) => {
 // @route DELETE api/orders/:id
 // @desc DELETE delete order
 // @access Public
-export const deleteUser = (req: Request, res: Response) => {
+export const deleteOrder = (req: Request, res: Response) => {
   const orderId: string = req.params.id
 
   Order.findByIdAndDelete({ _id: orderId }, (err: any, order: any) => {
