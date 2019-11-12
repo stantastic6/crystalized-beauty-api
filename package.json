@@ -10,9 +10,13 @@
   "scripts": {
     "build": "tsc",
     "server": "ts-node src/index.ts",
-    "start": "nodemon --watch src -e ts --ignore 'spec.ts' --ignore 'test.ts' --exec yarn run server"
+    "start": "nodemon --watch src -e ts --ignore 'spec.ts' --ignore 'test.ts' --exec yarn run server",
+    "test": "jest",
+    "test:models": "jest --testMatch='<rootDir>/src/**/__tests__/*.model.test.js'"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-export-default-from": "^7.5.2",
+    "@babel/preset-typescript": "^7.7.2",
     "@types/bcrypt": "^3.0.0",
     "@types/body-parser": "^1.17.1",
     "@types/cors": "^2.8.6",
@@ -26,12 +30,16 @@
     "@types/nodemon": "^1.19.0",
     "@types/slug": "^0.9.1",
     "@types/validator": "^10.11.3",
+    "jest": "^24.9.0",
     "nodemon": "^1.19.4",
     "prettier": "^1.18.2",
     "ts-node": "^8.4.1",
     "typescript": "^3.6.4"
   },
   "dependencies": {
+    "@babel/core": "^7.7.2",
+    "@babel/preset-env": "^7.7.1",
+    "babel-jest": "^24.9.0",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
