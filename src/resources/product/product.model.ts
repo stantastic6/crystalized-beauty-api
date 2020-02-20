@@ -6,10 +6,15 @@ export interface IProduct extends Document {
   description: string
   imageUrl?: string
   name: string
-  price: number
+  prices: Array<Price>
   sku: string
   unitsAvailable: number
   slug?: string
+}
+
+interface Price {
+  length: string
+  price: number
 }
 
 const productSchema: Schema = new Schema(
@@ -27,12 +32,12 @@ const productSchema: Schema = new Schema(
       unique: true,
       lowercase: true,
     },
-    price: {
-      // Price in cents
-      type: Number,
-      required: true,
-      min: 0,
-    },
+    prices: [
+      {
+        length: Number,
+        price: Number,
+      },
+    ],
     sku: {
       type: String,
       required: true,
