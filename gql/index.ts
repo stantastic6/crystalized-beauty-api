@@ -1,16 +1,32 @@
 import { config } from 'dotenv';
 import * as express from 'express';
 import { ApolloServer } from 'apollo-server-express';
-import { connection } from 'mongoose';
+import { connect } from 'mongoose';
+import * as cors from 'cors';
+import * as morgan from 'morgan';
+import { json, urlencoded } from 'body-parser';
+import * as dotenv from 'dotenv';
+import resolvers from './resolvers';
 import schema from './schema';
 
 config();
 
 const app = express();
+app.use(cors());
+dotenv.config();
+
+app.disable('x-powered-by');
+app.use(cors());
+app.use(json());
+app.use(urlencoded({ extended: true }));
+app.use(morgan('dev'));
+
 const PORT: any = process.env.PORT || 5000;
+const DB_URL: any = process.env.DB_URL || '';
 
 const server = new ApolloServer({
   typeDefs: schema,
+  resolvers,
   playground: process.env.NODE_ENV === 'development' ? true : false,
   introspection: true,
   tracing: true,
@@ -18,19 +34,20 @@ const server = new ApolloServer({
 
 server.applyMiddleware({
   app,
-  path: '/',
-  cors: true,
-  onHealthCheck: () =>
-    new Promise((resolve, reject) => {
-      if (connection.readyState > 0) {
-        resolve();
-      } else {
-        reject();
-      }
-    }),
+  path: '/graphql',
 });
 
 app.listen(PORT, () => {
   console.log(`🚀 Server listening on port ${PORT}`);
-  // console.log(`😷 Health checks available at ${process.env.HEALTH_ENDPOINT}`);
+  console.log(`${DB_URL}`);
+  console.log(`🚀 Connecting to mongodb ${PORT}`);
+  connect(
+    DB_URL,
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+      useFindAndModify: false,
+    }
+  );
 });

@@ -6,22 +6,31 @@ export default gql`
   # USERS
   type User {
     id: ID!
-    firstName: String!
-    lastName: String!
-    email: String!
-    password: String!
+    firstName: String
+    lastName: String
+    email: String
+    password: String
     role: String
     lastLogin: String
   }
 
   ####### QUERIES ######
-  type Query {
+  extend type Query {
     user(id: ID!): User!
     users: [User!]!
   }
 
   ####### MUTATIONS ######
-  type Mutation {
-    createUser(firstName: String!, lastName: String!, email: String!, password: String!)
+  extend type Mutation {
+    createUser(firstName: String!, lastName: String!, email: String!, password: String!): User!
+    updateUser(
+      id: String!
+      firstName: String
+      lastName: String
+      email: String
+      password: String
+      role: String
+    ): User!
+    deleteUser(id: String!): User!
   }
 `;
