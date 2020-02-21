@@ -1,14 +1,14 @@
-import { Schema, Document, model, Model } from 'mongoose'
-import { hash, compare } from 'bcrypt'
-import { NextFunction } from 'express'
+import { Schema, Document, model, Model } from 'mongoose';
+import { hash, compare } from 'bcrypt';
+import { NextFunction } from 'express';
 
 export interface IUser extends Document {
-  firstName: string
-  lastName: string
-  email: string
-  password: string
-  role: string
-  lastLogin?: Date
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  role: string;
+  lastLogin?: Date;
 }
 
 const userSchema: Schema = new Schema(
@@ -43,37 +43,37 @@ const userSchema: Schema = new Schema(
     },
   },
   { timestamps: true }
-)
+);
 
 userSchema.pre<IUser>('save', function(next: NextFunction) {
-  const user = this
+  const user = this;
 
   if (!user.isModified('password')) {
-    return next()
+    return next();
   }
 
   hash(user.password, 8, (err, hash) => {
     if (err) {
-      return next(err)
+      return next(err);
     }
 
-    user.password = hash
-    next()
-  })
-})
+    user.password = hash;
+    next();
+  });
+});
 
 userSchema.methods.checkPassword = function(password: string) {
-  const passwordHash = this.password
+  const passwordHash = this.password;
 
   return new Promise((resolve, reject) => {
     compare(password, passwordHash, (err, same) => {
       if (err) {
-        return reject(err)
+        return reject(err);
       }
 
-      resolve(same)
-    })
-  })
-}
+      resolve(same);
+    });
+  });
+};
 
-export const User: Model<IUser> = model<IUser>('user', userSchema)
+export const User: Model<IUser> = model<IUser>('user', userSchema);
