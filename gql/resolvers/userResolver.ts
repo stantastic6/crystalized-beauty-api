@@ -8,7 +8,7 @@ export default {
       return user;
     },
     users: async () => {
-      const users = await User.find().exec();
+      const users = await User.find().lean();
 
       // TODO: Handle error
       return users;
@@ -19,14 +19,14 @@ export default {
       _: any,
       args: { firstName: string; lastName: string; email: string; password: string }
     ) => {
-      const newUser = User.create(args);
+      const newUser = await User.create(args);
       return newUser;
     },
     updateUser: async (
       _: any,
       args: { id: string; firstName: string; lastName: string; email: string; password: string; role: string }
     ) => {
-      const newUser = User.findOneAndUpdate({ _id: args.id }, args, {
+      const newUser = await User.findOneAndUpdate({ _id: args.id }, args, {
         new: true,
         runValidators: true,
       });
@@ -34,7 +34,7 @@ export default {
       return newUser;
     },
     deleteUser: async (_: any, args: { id: string }) => {
-      const user = User.findByIdAndDelete({ _id: args.id });
+      const user = await User.findByIdAndDelete({ _id: args.id });
       return user;
     },
   },
