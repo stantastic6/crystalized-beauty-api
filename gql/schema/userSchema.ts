@@ -31,6 +31,6 @@ export default gql`
       password: String
       role: String
     ): User!
-    deleteUser(id: String!): User!
+    deleteUser(id: ID!): User!
   }
 `;

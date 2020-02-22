@@ -42,6 +42,7 @@ export default gql`
       unitsAvailable: Int
     ): Product!
     updateProduct(
+      id: ID!
       name: String
       description: String
       imageUrl: String
@@ -49,6 +50,6 @@ export default gql`
       sku: String
       unitsAvailable: Int
     ): Product!
-    deleteProduct(id: String!): Product!
+    deleteProduct(id: ID!): Product!
   }
 `;
