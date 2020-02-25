@@ -1,5 +1,11 @@
 import { Order } from '../models/order.model';
 
+export interface OrderInput {
+  amount: number;
+  userId: string;
+  productIds: string[];
+}
+
 export default {
   Query: {
     order: async (_: any, args: { id: string }) =>
@@ -14,12 +20,11 @@ export default {
         .exec(),
   },
   Mutation: {
-    // TODO: implement these
-    createOrder: async (_: any, args: { input: any }) => {
+    createOrder: async (_: any, args: { input: OrderInput }) => {
       const order = await Order.create(args.input);
       return order;
     },
-    updateProduct: async (_: any, args: { id: string; input: any }) => {
+    updateProduct: async (_: any, args: { id: string; input: OrderInput }) => {
       const newOrder = await Order.findOneAndUpdate({ _id: args.id }, args.input, {
         new: true,
         runValidators: true,
