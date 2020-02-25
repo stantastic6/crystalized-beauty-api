@@ -1,5 +1,5 @@
-import userResolver from './userResolver';
-import productResolver from './productResolver';
-import orderResolver from './orderResolver';
+import userResolver from './user.resolver';
+import productResolver from './product.resolver';
+import orderResolver from './order.resolver';
 
 export default [userResolver, productResolver, orderResolver];
