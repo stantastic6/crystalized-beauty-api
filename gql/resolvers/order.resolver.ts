@@ -8,7 +8,7 @@ export interface OrderInput {
 
 export default {
   Query: {
-    order: async (_: any, args: { id: string }) =>
+    order: async (_: void, args: { id: string }) =>
       Order.findById({ _id: args.id })
         .populate('user')
         .populate('products')
@@ -20,18 +20,18 @@ export default {
         .exec(),
   },
   Mutation: {
-    createOrder: async (_: any, args: { input: OrderInput }) => {
+    createOrder: async (_: void, args: { input: OrderInput }) => {
       const order = await Order.create(args.input);
       return order;
     },
-    updateProduct: async (_: any, args: { id: string; input: OrderInput }) => {
+    updateProduct: async (_: void, args: { id: string; input: OrderInput }) => {
       const newOrder = await Order.findOneAndUpdate({ _id: args.id }, args.input, {
         new: true,
         runValidators: true,
       });
       return newOrder;
     },
-    deleteProduct: async (_: any, args: { id: string }) => {
+    deleteProduct: async (_: void, args: { id: string }) => {
       const order = await Order.findByIdAndDelete({ _id: args.id });
       return order;
     },

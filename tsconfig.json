@@ -17,5 +17,5 @@
     "lib": ["es2017", "dom"]
   },
   "include": ["./src/**/*.ts", "./gql/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["/node_modules"]
 }

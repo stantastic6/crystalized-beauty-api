@@ -2,7 +2,7 @@ import { Product } from '../models/product.model';
 
 export default {
   Query: {
-    product: async (_: any, args: { id: string }) => {
+    product: async (_: void, args: { id: string }) => {
       const product = await Product.findById({ _id: args.id }).exec();
       return product;
     },
@@ -14,7 +14,7 @@ export default {
   },
   Mutation: {
     createProduct: async (
-      _: any,
+      _: void,
       args: {
         name: string;
         description: string;
@@ -28,7 +28,7 @@ export default {
       return product;
     },
     updateProduct: async (
-      _: any,
+      _: void,
       args: {
         id: string;
         name: string;
@@ -45,7 +45,7 @@ export default {
       });
       return newProduct;
     },
-    deleteProduct: async (_: any, args: { id: string }) => {
+    deleteProduct: async (_: void, args: { id: string }) => {
       const product = await Product.findByIdAndDelete({ _id: args.id });
       return product;
     },

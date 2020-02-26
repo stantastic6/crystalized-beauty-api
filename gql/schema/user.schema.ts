@@ -14,6 +14,10 @@ export default gql`
     lastLogin: String
   }
 
+  type SessionToken {
+    token: String!
+  }
+
   ####### QUERIES ######
   extend type Query {
     user(id: ID!): User!
@@ -22,6 +26,7 @@ export default gql`
 
   ####### MUTATIONS ######
   extend type Mutation {
+    login(email: String!, password: String!): SessionToken!
     createUser(firstName: String!, lastName: String!, email: String!, password: String!): User!
     updateUser(
       id: String!

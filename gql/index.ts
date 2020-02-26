@@ -1,6 +1,6 @@
 import { config } from 'dotenv';
 import * as express from 'express';
-import { ApolloServer } from 'apollo-server-express';
+import { ApolloServer, AuthenticationError } from 'apollo-server-express';
 import { connect } from 'mongoose';
 import * as cors from 'cors';
 import * as morgan from 'morgan';
@@ -8,6 +8,7 @@ import { json, urlencoded } from 'body-parser';
 import * as dotenv from 'dotenv';
 import resolvers from './resolvers';
 import schema from './schema';
+import { verify } from 'jsonwebtoken';
 
 config();
 
@@ -24,9 +25,22 @@ app.use(morgan('dev'));
 const PORT: any = process.env.PORT || 5000;
 const DB_URL: any = process.env.DB_URL || '';
 
+const getUserSession = async (req: any) => {
+  const token = req.headers['token'];
+
+  if (token) {
+    try {
+      return verify(token, 'changethis');
+    } catch (e) {
+      throw new AuthenticationError('Your session expired. Sign in again.');
+    }
+  }
+};
+
 const server = new ApolloServer({
   typeDefs: schema,
   resolvers,
+  context: async ({ req }) => ({ authedUser: await getUserSession(req) }),
   playground: process.env.NODE_ENV === 'development' ? true : false,
   introspection: true,
   tracing: true,
