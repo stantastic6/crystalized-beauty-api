@@ -52,9 +52,7 @@ server.applyMiddleware({
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server listening on port ${PORT}`);
-  console.log(`${DB_URL}`);
-  console.log(`🚀 Connecting to mongodb ${PORT}`);
+  console.log(`🚀 Connecting to mongodb ${DB_URL}`);
   connect(
     DB_URL,
     {
