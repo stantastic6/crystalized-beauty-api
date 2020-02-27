@@ -29,8 +29,10 @@ const getUserSession = async (req: any) => {
   const token = req.headers['token'];
 
   if (token) {
+    const jwtSecret: any = process.env.JWT_SECRET;
+
     try {
-      return verify(token, 'changethis');
+      return verify(token, jwtSecret);
     } catch (e) {
       throw new AuthenticationError('Your session expired. Sign in again.');
     }
@@ -40,7 +42,7 @@ const getUserSession = async (req: any) => {
 const server = new ApolloServer({
   typeDefs: schema,
   resolvers,
-  context: async ({ req }) => ({ authedUser: await getUserSession(req) }),
+  context: async ({ req }) => ({ currentUser: await getUserSession(req) }),
   playground: process.env.NODE_ENV === 'development' ? true : false,
   introspection: true,
   tracing: true,

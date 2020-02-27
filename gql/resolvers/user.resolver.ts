@@ -1,7 +1,8 @@
 import { User } from '../models/user.model';
-import { AuthenticationError } from 'apollo-server-express';
+import { AuthenticationError, ForbiddenError } from 'apollo-server-express';
 import { compareSync } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
+import { canEditUser, isAdmin } from '../utils/authorization';
 
 export interface AuthedUser {
   id: string;
@@ -12,40 +13,66 @@ export interface AuthedUser {
   lastLogin: Date;
 }
 
+export interface UserIput {
+  firstName: string;
+  lastName: string;
+  password: string;
+  email: string;
+  role: string;
+}
+
 export default {
   Query: {
-    user: async (_: void, args: { id: string }) => {
+    user: async (_: void, args: { id: string }, context: { currentUser: AuthedUser }) => {
+      if (!canEditUser(context.currentUser, args.id)) {
+        throw new ForbiddenError('You are unauthorized to perform this action.');
+      }
+
       const user = await User.findById({ _id: args.id }, '-password').lean();
-      // TODO: Handle error
+      // TODO: Handle not found
       return user;
     },
-    users: async () => {
+    users: async (_: void, _: void, context: { currentUser: AuthedUser }) => {
+      if (!isAdmin(context.currentUser.role)) {
+        throw new ForbiddenError('You are unauthorized to perform this action.');
+      }
+
       const users = await User.find().lean();
 
-      // TODO: Handle error
+      // TODO: Handle not found
       return users;
     },
   },
   Mutation: {
-    createUser: async (
-      _: void,
-      args: { firstName: string; lastName: string; email: string; password: string }
-    ) => {
-      const newUser = await User.create(args);
+    createUser: async (_: void, args: { input: UserIput }, context: { currentUser: AuthedUser }) => {
+      if (!isAdmin(context.currentUser.role)) {
+        throw new ForbiddenError('You are unauthorized to perform this action.');
+      }
+
+      const newUser = await User.create(args.input);
       return newUser;
     },
     updateUser: async (
       _: void,
-      args: { id: string; firstName: string; lastName: string; email: string; password: string; role: string }
+      args: { id: string; input: UserIput },
+      context: { currentUser: AuthedUser }
     ) => {
-      const newUser = await User.findOneAndUpdate({ _id: args.id }, args, {
+      if (!canEditUser(context.currentUser, args.id)) {
+        throw new ForbiddenError('You are unauthorized to perform this action.');
+      }
+
+      const newUser = await User.findOneAndUpdate({ _id: args.id }, args.input, {
         new: true,
         runValidators: true,
       });
 
       return newUser;
     },
-    deleteUser: async (_: void, args: { id: string }) => {
+    deleteUser: async (_: void, args: { id: string }, context: { currentUser: AuthedUser }) => {
+      if (!isAdmin(context.currentUser.role)) {
+        throw new ForbiddenError('You are unauthorized to perform this action.');
+      }
+
       const user = await User.findByIdAndDelete({ _id: args.id });
       return user;
     },
@@ -62,6 +89,8 @@ export default {
         throw new AuthenticationError('Invalid email or password.');
       }
 
+      const jwtSecret: any = process.env.JWT_SECRET;
+
       return sign(
         {
           id: user.id,
@@ -71,7 +100,7 @@ export default {
           role: user.role,
           lastLogin: user.lastLogin,
         },
-        'changethis',
+        jwtSecret,
         { expiresIn: '1day' }
       );
     },

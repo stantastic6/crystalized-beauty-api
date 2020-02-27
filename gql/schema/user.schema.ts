@@ -18,6 +18,21 @@ export default gql`
     token: String!
   }
 
+  input CreateUserInput {
+    firstName: String!
+    lastName: String!
+    email: String!
+    password: String!
+  }
+
+  input UpdateUserInput {
+    firstName: String!
+    lastName: String!
+    email: String!
+    password: String
+    role: String
+  }
+
   ####### QUERIES ######
   extend type Query {
     user(id: ID!): User!
@@ -27,15 +42,8 @@ export default gql`
   ####### MUTATIONS ######
   extend type Mutation {
     login(email: String!, password: String!): SessionToken!
-    createUser(firstName: String!, lastName: String!, email: String!, password: String!): User!
-    updateUser(
-      id: String!
-      firstName: String
-      lastName: String
-      email: String
-      password: String
-      role: String
-    ): User!
+    createUser(input: CreateUserInput!): User!
+    updateUser(id: ID!, input: UpdateUserInput!): User!
     deleteUser(id: ID!): User!
   }
 `;
