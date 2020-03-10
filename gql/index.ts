@@ -26,13 +26,14 @@ const PORT: any = process.env.PORT || 5000;
 const DB_URL: any = process.env.DB_URL || '';
 
 const getUserSession = async (req: any) => {
-  const token = req.headers['token'];
+  const token: string = req.headers['authorization'];
 
   if (token) {
     const jwtSecret: any = process.env.JWT_SECRET;
+    const jwt: string = token.split('Bearer ')[1];
 
     try {
-      return verify(token, jwtSecret);
+      return verify(jwt, jwtSecret);
     } catch (e) {
       throw new AuthenticationError('Your session expired. Sign in again.');
     }

@@ -24,16 +24,17 @@ export interface UserIput {
 export default {
   Query: {
     user: async (_: void, args: { id: string }, context: { currentUser: AuthedUser }) => {
-      if (!canEditUser(context.currentUser, args.id)) {
+      if (!context.currentUser || !canEditUser(context.currentUser, args.id)) {
         throw new ForbiddenError('You are unauthorized to perform this action.');
       }
 
       const user = await User.findById({ _id: args.id }, '-password').lean();
+
       // TODO: Handle not found
       return user;
     },
-    users: async (_: void, _: void, context: { currentUser: AuthedUser }) => {
-      if (!isAdmin(context.currentUser.role)) {
+    users: async (_: void, args: void, context: { currentUser: AuthedUser }) => {
+      if (!context.currentUser || !isAdmin(context.currentUser.role)) {
         throw new ForbiddenError('You are unauthorized to perform this action.');
       }
 
@@ -45,7 +46,7 @@ export default {
   },
   Mutation: {
     createUser: async (_: void, args: { input: UserIput }, context: { currentUser: AuthedUser }) => {
-      if (!isAdmin(context.currentUser.role)) {
+      if (!context.currentUser || !isAdmin(context.currentUser.role)) {
         throw new ForbiddenError('You are unauthorized to perform this action.');
       }
 
@@ -57,7 +58,7 @@ export default {
       args: { id: string; input: UserIput },
       context: { currentUser: AuthedUser }
     ) => {
-      if (!canEditUser(context.currentUser, args.id)) {
+      if (!context.currentUser || !canEditUser(context.currentUser, args.id)) {
         throw new ForbiddenError('You are unauthorized to perform this action.');
       }
 
@@ -69,7 +70,7 @@ export default {
       return newUser;
     },
     deleteUser: async (_: void, args: { id: string }, context: { currentUser: AuthedUser }) => {
-      if (!isAdmin(context.currentUser.role)) {
+      if (!context.currentUser || !isAdmin(context.currentUser.role)) {
         throw new ForbiddenError('You are unauthorized to perform this action.');
       }
 
@@ -91,7 +92,7 @@ export default {
 
       const jwtSecret: any = process.env.JWT_SECRET;
 
-      return sign(
+      const token = sign(
         {
           id: user.id,
           firstName: user.firstName,
@@ -103,6 +104,8 @@ export default {
         jwtSecret,
         { expiresIn: '1day' }
       );
+
+      return { token };
     },
   },
 };
