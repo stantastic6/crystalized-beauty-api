@@ -39,10 +39,13 @@ export default {
         unitsAvailable: number;
       }
     ) => {
-      const newProduct = await Product.findOneAndUpdate({ _id: args.id }, args, {
-        new: true,
-        runValidators: true,
-      });
+      const newProduct = await Product.findOneAndUpdate(
+        { _id: args.id },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
       return newProduct;
     },
     deleteProduct: async (_: void, args: { id: string }) => {
