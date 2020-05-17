@@ -10,9 +10,7 @@
   "scripts": {
     "build": "tsc",
     "server": "ts-node src/index.ts",
-    "server:gql": "ts-node gql/index.ts",
     "start": "nodemon --watch src -e ts --ignore 'spec.ts' --ignore 'test.ts' --exec yarn run server",
-    "start:gql": "nodemon --watch gql -e ts --ignore 'spec.ts' --ignore 'test.ts' --exec yarn run server:gql",
     "test": "jest",
     "test:models": "jest --testMatch='<rootDir>/src/**/__tests__/*.model.test.js'"
   },
