@@ -56,13 +56,10 @@ server.applyMiddleware({
 
 app.listen(PORT, () => {
   console.log(`🚀 Connecting to mongodb ${DB_URL}`);
-  connect(
-    DB_URL,
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
-      useFindAndModify: false,
-    }
-  );
+  connect(DB_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+  });
 });

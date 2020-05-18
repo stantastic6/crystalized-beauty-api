@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '5000:5000'
+    depends_on:
+      - mongodb
+    restart: always
+    environment:
+      NODE_ENV: development
+      PORT: 5000
+      DB_URL: mongodb://mongodb:27017/crystalized-hair-development
+      JWT_SECRET: g3tcryst@liz3d!
+  mongodb:
+    image: mongo:4
+    restart: always
+    ports:
+      - '27017:27017'
