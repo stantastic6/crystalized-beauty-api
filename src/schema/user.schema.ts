@@ -42,7 +42,7 @@ export default gql`
   ####### MUTATIONS ######
   extend type Mutation {
     login(email: String!, password: String!): SessionToken!
-    createUser(input: CreateUserInput!): User!
+    createUser(input: CreateUserInput!): SessionToken!
     updateUser(id: ID!, input: UpdateUserInput!): User!
     deleteUser(id: ID!): User!
   }

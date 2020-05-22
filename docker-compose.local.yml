@@ -1,24 +1,14 @@
 version: '3'
 
 services:
-  client:
-    build:
-      context: ./crystalized-beauty-web
-      dockerfile: Dockerfile
-    ports:
-      - '3000:3000'
-    volumes:
-      - ./crystalized-beauty-web:/usr/src/app
-    depends_on:
-      - api
   api:
     build:
-      context: ./crystalized-beauty-api
+      context: .
       dockerfile: Dockerfile
     ports:
       - '5000:5000'
     volumes:
-      - ./crystalized-beauty-api:/usr/src/app
+      - .:/usr/src/app
     depends_on:
       - mongodb
     environment:
@@ -28,6 +18,8 @@ services:
       JWT_SECRET: g3tcryst@liz3d! #TODO: kill this
   mongodb:
     image: mongo:4
+    restart: always
     ports:
       - '27017:27017'
-    restart: unless-stopped
+    volumes:
+      - '.:/data'

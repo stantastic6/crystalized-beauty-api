@@ -26,17 +26,18 @@ $ yarn server
 
 ### Todos (For MVP)
 
-- [x] Create Admin Dashboard
+- [ ] Create Admin Dashboard
 - [x] User authentication (login/sign up)
-- [x] Decide on Bootstrap or Foundation
+- [ ] Decide on Bootstrap or Foundation
 - [ ] Homepage layout
-- [x] Shopping Cart
-- [x] Checkout
-- [ ] GraphQL/Apollo
+- [ ] Shopping Cart
+- [ ] Checkout
+- [x] GraphQL/Apollo
 - [ ] Calendly Integration
 - [ ] Loading animation
 - [ ] Product pages (index, show)
-- [ ] GCP
+- [ ] AWS or GCP
 - [ ] CI/CD (?)
-- [ ] Write Tests
+- [x] Write Tests
 - [ ] Captcha for user creation
+- [ ] Better ENV Variable Handling
