@@ -1,6 +1,5 @@
 import { Schema, Document, model, Model } from 'mongoose';
-import { hash, compare } from 'bcrypt';
-import { NextFunction } from 'express';
+import { hash, compare } from 'bcryptjs';
 
 export interface IUser extends Document {
   firstName: string;

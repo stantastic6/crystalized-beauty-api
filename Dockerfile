@@ -1,8 +1,8 @@
 FROM node:12.16.3-alpine
 
-RUN npm i -g nodemon
+RUN apk add --no-cache g++ gcc make python
 
-RUN apk add g++ make python
+RUN npm i -g nodemon
 
 WORKDIR /usr/src/app
 
